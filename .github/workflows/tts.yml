@@ -1,0 +1,41 @@
+name: Text to Speech (Parham)
+
+on:
+  push:
+    paths:
+      - text.txt
+
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install gTTS
+        run: pip install gTTS
+
+      - name: Convert text to speech
+        run: |
+          python - <<EOF
+          from gtts import gTTS
+          import os
+          with open("text.txt", "r", encoding="utf-8") as f:
+              text = f.read().strip()
+          if text:
+              tts = gTTS(text=text, lang='fa')
+              tts.save("voice.mp3")
+          EOF
+
+      - name: Commit MP3 output
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add voice.mp3
+          git commit -m "🔊 فایل صوتی جدید ساخته شد"
+          git push
