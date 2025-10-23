@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>تبدیل متن به صدا - parham</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: sans-serif;
+      direction: rtl;
+      text-align: center;
+      margin-top: 100px;
+    }
+    textarea {
+      width: 80%;
+      height: 150px;
+      font-size: 18px;
+    }
+    button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎙️ تبدیل متن به صدا</h1>
+  <form id="ttsForm">
+    <textarea id="text" placeholder="متن خود را بنویسید..."></textarea><br><br>
+    <button type="button" onclick="submitText()">ارسال به گیت‌هاب</button>
+  </form>
+
+  <script>
+    async function submitText() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return alert("لطفاً متنی وارد کنید!");
+
+      const file = new Blob([text], { type: 'text/plain' });
+      const formData = new FormData();
+      formData.append('file', file, 'text.txt');
+
+      // توجه: برای واقعی کار کردن باید GitHub API Token بزنی
+      alert("فعلاً فقط نمایشی است، ولی GitHub Actions با text.txt کار می‌کند.");
+    }
+  </script>
+</body>
+</html>
