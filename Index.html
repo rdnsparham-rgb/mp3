@@ -2,49 +2,123 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>تبدیل متن به صدا - parham</title>
+  <title>🎙️ تبدیل متن به صدا - parham</title>
   <style>
     body {
-      background: #f0f0f0;
-      font-family: sans-serif;
+      font-family: 'Vazir', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
       direction: rtl;
-      text-align: center;
-      margin-top: 100px;
     }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+
     textarea {
       width: 80%;
+      max-width: 600px;
       height: 150px;
+      padding: 15px;
       font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      outline: none;
     }
-    button {
-      background: #333;
+
+    select, button {
+      margin-top: 20px;
+      background-color: #007bff;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 30px;
+      border-radius: 10px;
       font-size: 18px;
       cursor: pointer;
-      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    select:hover, button:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <h1>🎙️ تبدیل متن به صدا</h1>
-  <form id="ttsForm">
-    <textarea id="text" placeholder="متن خود را بنویسید..."></textarea><br><br>
-    <button type="button" onclick="submitText()">ارسال به گیت‌هاب</button>
-  </form>
+  <header>
+    🎧 تبدیل متن به صدا
+  </header>
+
+  <main>
+    <textarea id="text" placeholder="متن خود را اینجا بنویسید..."></textarea>
+
+    <select id="voice">
+      <option value="female">زن</option>
+      <option value="male">مرد</option>
+      <option value="old">پیرمرد</option>
+      <option value="deep">صدای کلفت جذاب</option>
+    </select>
+
+    <button onclick="speakText()">🔊 پخش صدا</button>
+  </main>
+
+  <footer>
+    ساخته شده توسط: parham h
+  </footer>
 
   <script>
-    async function submitText() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) return alert("لطفاً متنی وارد کنید!");
+    function speakText() {
+      const text = document.getElementById("text").value.trim();
+      const voiceType = document.getElementById("voice").value;
 
-      const file = new Blob([text], { type: 'text/plain' });
-      const formData = new FormData();
-      formData.append('file', file, 'text.txt');
+      if (!text) {
+        alert("لطفاً متنی وارد کنید!");
+        return;
+      }
 
-      // توجه: برای واقعی کار کردن باید GitHub API Token بزنی
-      alert("فعلاً فقط نمایشی است، ولی GitHub Actions با text.txt کار می‌کند.");
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "fa-IR";
+
+      // تعیین نوع صدا با pitch و rate برای شبیه‌سازی
+      switch(voiceType) {
+        case "female":
+          utterance.pitch = 1.2;
+          utterance.rate = 1;
+          break;
+        case "male":
+          utterance.pitch = 0.9;
+          utterance.rate = 1;
+          break;
+        case "old":
+          utterance.pitch = 0.7;
+          utterance.rate = 0.9;
+          break;
+        case "deep":
+          utterance.pitch = 0.5;
+          utterance.rate = 1;
+          break;
+      }
+
+      speechSynthesis.speak(utterance);
     }
   </script>
 </body>
